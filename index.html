@@ -21,17 +21,17 @@
   * { box-sizing: border-box; }
   body {
     margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: var(--bg); color: var(--text); line-height: 1.55;
+    background: var(--bg); color: var(--text); line-height: 1.5;
   }
   header {
     position: sticky; top: 0; z-index: 10;
     backdrop-filter: blur(10px);
-    background: rgba(11,15,20,.88);
+    background: rgba(11,15,20,.92);
     border-bottom: 1px solid var(--border);
-    padding: 14px 20px;
-    display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+    padding: 12px 18px;
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
   }
-  h1 { font-size: 16px; margin: 0; font-weight: 650; letter-spacing: .02em; }
+  h1 { font-size: 15px; margin: 0; font-weight: 650; }
   h1 span { color: var(--accent); }
   .meta { color: var(--muted); font-size: 12px; }
   nav { display: flex; gap: 6px; }
@@ -40,36 +40,82 @@
     border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 13px;
   }
   nav button.active { color: var(--bg); background: var(--accent); border-color: var(--accent); }
-  main { max-width: 920px; margin: 0 auto; padding: 20px 16px 64px; }
+  main { max-width: 920px; margin: 0 auto; padding: 16px 14px 64px; }
+  .focus {
+    background: linear-gradient(180deg, #152018 0%, var(--panel) 100%);
+    border: 1px solid #2a4a3a;
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+  }
+  .focus h3 {
+    margin: 0 0 10px; font-size: 13px; letter-spacing: .06em;
+    color: var(--accent); text-transform: uppercase;
+  }
+  .focus-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .focus-col { background: #0e141c; border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
+  .focus-col .lab { font-size: 11px; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
+  .focus-col .lab.risk { color: var(--risk); }
+  .focus-col .lab.new { color: var(--new); }
+  .focus-col .lab.hot { color: var(--warn); }
+  .chip {
+    display: flex; justify-content: space-between; gap: 8px; align-items: baseline;
+    padding: 5px 0; border-bottom: 1px dashed #1a2530; font-size: 13px;
+  }
+  .chip:last-child { border-bottom: 0; }
+  .chip .n { font-weight: 650; }
+  .chip .p { font-variant-numeric: tabular-nums; font-weight: 700; }
+  .chip .sub { color: var(--muted); font-size: 11px; display: block; margin-top: 2px; font-weight: 400; }
   .card {
     background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
-    padding: 14px 16px; margin: 0 0 12px;
+    padding: 12px 14px; margin: 0 0 10px; position: relative;
+  }
+  .card.is-new { border-color: #2a4a7a; box-shadow: inset 3px 0 0 var(--new); }
+  .card.is-risk { border-color: #5a2a2a; box-shadow: inset 3px 0 0 var(--risk); }
+  .card.is-new.is-risk { box-shadow: inset 3px 0 0 var(--new), inset 6px 0 0 var(--risk); }
+  .card-head {
+    display: flex; gap: 10px; align-items: flex-start; justify-content: space-between;
+    flex-wrap: wrap; margin-bottom: 6px;
   }
   .card h2 {
-    margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    margin: 0; font-size: 15px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+  }
+  .pct-big {
+    font-size: 20px; font-weight: 750; font-variant-numeric: tabular-nums;
+    line-height: 1; white-space: nowrap;
   }
   .badge {
     font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border);
-    color: var(--muted); font-weight: 600;
+    color: var(--muted); font-weight: 650;
   }
-  .badge.new { color: var(--new); border-color: #2a3f6e; background: #152038; }
+  .badge.new { color: #fff; background: var(--new); border-color: var(--new); }
   .badge.prev { color: var(--prev); }
   .badge.seen { color: var(--muted); }
+  .badge.risk-tag { color: #fff; background: var(--risk); border-color: var(--risk); }
   .ca {
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 12px; color: var(--accent); word-break: break-all;
-    margin: 4px 0 8px; cursor: pointer;
+    font-size: 11px; color: var(--accent); word-break: break-all;
+    margin: 2px 0 8px; cursor: pointer; opacity: .85;
   }
-  .nums { font-size: 13px; color: #c5d2e0; margin-bottom: 8px; }
-  .body { font-size: 13px; color: var(--muted); white-space: pre-wrap; }
-  .body a { color: var(--accent); }
+  .nums { font-size: 12px; color: #c5d2e0; margin-bottom: 8px; }
+  .kv { display: grid; gap: 4px; }
+  .kv .row { font-size: 13px; }
+  .kv .k { color: var(--muted); font-size: 11px; font-weight: 650; margin-right: 6px; }
+  .kv .risk-row {
+    background: rgba(255,107,107,.08); border: 1px solid #4a2a2a;
+    border-radius: 8px; padding: 6px 8px; color: #ffb4b4;
+  }
+  .kv .new-row .k { color: var(--new); }
   .section-title {
-    margin: 22px 0 10px; font-size: 13px; color: var(--muted);
-    text-transform: uppercase; letter-spacing: .08em;
+    margin: 18px 0 8px; font-size: 12px; color: var(--muted);
+    letter-spacing: .08em; text-transform: uppercase;
   }
   .empty { color: var(--muted); padding: 40px 0; text-align: center; }
   footer { color: var(--muted); font-size: 11px; text-align: center; padding: 24px; }
   .pos { color: var(--accent); } .neg { color: var(--risk); }
+  .mute-line { color: var(--muted); font-size: 12px; }
+  details.more { margin-top: 6px; }
+  details.more summary { cursor: pointer; color: var(--muted); font-size: 12px; }
 </style>
 </head>
 <body>
@@ -89,10 +135,37 @@
   <div id="panel-brief" hidden></div>
   <div id="panel-sudden" hidden></div>
 </main>
-<footer>观察非买卖建议 · 数据刚查刚写 · 约每 2 分钟自动刷新</footer>
+<footer>观察非买卖建议 · 先看页顶「重点」· 约每 2 分钟自动刷新</footer>
 <script>
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const linkify = (s) => esc(s).replace(/https?:\/\/[^\s)\]>]+/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
+
+function parsePct(nums) {
+  if (!nums) return null;
+  const m = nums.match(/窗涨跌\s*([+＋\-−]?\d+(?:\.\d+)?%?)/);
+  if (!m) return null;
+  let raw = m[1].replace('＋','+').replace('−','-');
+  if (!raw.endsWith('%')) raw += '%';
+  const n = parseFloat(raw.replace('%','').replace('+',''));
+  if (Number.isNaN(n)) return null;
+  const sign = raw.trim().startsWith('-') || raw.includes('−') ? -1 : 1;
+  // if string had + or bare number, use parsed sign from string
+  const neg = /[-−]/.test(m[1]);
+  return { text: (neg ? '-' : '+') + Math.abs(n) + (raw.includes('%') ? '%' : '%'), value: neg ? -Math.abs(n) : Math.abs(n), neg };
+}
+
+function riskFlags(body) {
+  const t = (body || []).join(' ');
+  const flags = [];
+  if (/rug_ratio\s*=\s*1|rug_ratio\s*约?\s*1\b|确认\s*rug/i.test(t)) flags.push('rug');
+  if (/关盘/.test(t)) flags.push('关盘');
+  if (/蜜罐|honeypot/i.test(t)) flags.push('蜜罐');
+  if (/老鼠仓/.test(t)) flags.push('老鼠仓');
+  if (/bundler\s*约?\s*([3-9]\d|100)/i.test(t) || /捆绑/.test(t) && /高/.test(t)) flags.push('bundler高');
+  if (/前十持仓\s*约?\s*([5-9]\d)/.test(t)) flags.push('前十集中');
+  if (/微市值|池子薄/.test(t)) flags.push('薄池');
+  return flags;
+}
 
 function parseGmgn(md) {
   if (!md || !md.trim()) return null;
@@ -112,11 +185,10 @@ function parseGmgn(md) {
     }
     if (!cur) continue;
     if (!L.trim()) { flushItem(); continue; }
-    // title line: NAME · Chain · TAG
     if (/·\s*(Solana|Ethereum|BSC|Base|Arbitrum)/i.test(L) && !L.startsWith('窗') && !L.startsWith('背景') && !L.startsWith('续热') && !L.startsWith('叙事') && !L.startsWith('启动') && !L.startsWith('风险')) {
       flushItem();
       const parts = L.split('·').map(x => x.trim());
-      item = { name: parts[0] || L, chain: parts[1] || '', tag: parts[2] || '', ca: '', nums: '', body: [] };
+      item = { name: parts[0] || L, chain: parts[1] || '', tag: parts[2] || '', ca: '', nums: '', body: [], section: cur.title };
       continue;
     }
     if (item && !item.ca && /^[0-9a-zA-Z]{20,}$/.test(L.trim())) { item.ca = L.trim(); continue; }
@@ -127,27 +199,103 @@ function parseGmgn(md) {
   return { title, source, sections };
 }
 
+function enrich(it) {
+  const pct = parsePct(it.nums);
+  const flags = riskFlags(it.body);
+  const tag = (it.tag || '').toUpperCase();
+  const isNew = tag.includes('NEW');
+  const riskLine = (it.body || []).find(l => l.startsWith('风险')) || '';
+  const launch = (it.body || []).find(l => l.startsWith('启动')) || '';
+  const narrative = (it.body || []).find(l => l.startsWith('叙事') || l.startsWith('续热') || l.startsWith('背景')) || '';
+  return { ...it, pct, flags, isNew, riskLine, launch, narrative, tag };
+}
+
+function renderFocus(items6) {
+  const list = items6.map(enrich);
+  const news = list.filter(x => x.isNew);
+  const hot = [...list].sort((a,b) => Math.abs(b.pct?.value||0) - Math.abs(a.pct?.value||0)).slice(0,5);
+  const risky = list.filter(x => x.flags.length >= 2 || x.flags.includes('rug') || x.flags.includes('关盘'));
+
+  const chip = (x, extra='') => {
+    const cls = x.pct?.neg ? 'neg' : 'pos';
+    const p = x.pct ? `<span class="p ${cls}">${esc(x.pct.text)}</span>` : '';
+    return `<div class="chip"><div><span class="n">${esc(x.name)}</span>
+      <span class="sub">${esc(x.chain)}${x.isNew?' · NEW':''}${extra ? ' · '+esc(extra) : ''}</span></div>${p}</div>`;
+  };
+
+  return `<section class="focus">
+    <h3>重点（6h · 先看这里）</h3>
+    <div class="focus-grid">
+      <div class="focus-col">
+        <div class="lab new">NEW 新进</div>
+        ${news.length ? news.map(x => chip(x)).join('') : '<div class="mute-line">本轮无 NEW</div>'}
+      </div>
+      <div class="focus-col">
+        <div class="lab hot">涨跌最猛</div>
+        ${hot.map(x => chip(x)).join('')}
+      </div>
+      <div class="focus-col">
+        <div class="lab risk">风险优先看</div>
+        ${risky.length ? risky.map(x => chip(x, x.flags.slice(0,2).join('/'))).join('') : '<div class="mute-line">无高危标红项</div>'}
+      </div>
+    </div>
+  </section>`;
+}
+
+function renderCard(it) {
+  const x = enrich(it);
+  const badgeCls = x.isNew ? 'new' : x.tag.includes('PREV') ? 'prev' : 'seen';
+  const cls = ['card', x.isNew ? 'is-new' : '', x.flags.length ? 'is-risk' : ''].filter(Boolean).join(' ');
+  const pctHtml = x.pct
+    ? `<div class="pct-big ${x.pct.neg ? 'neg' : 'pos'}">${esc(x.pct.text)}</div>`
+    : '';
+  const riskBadges = x.flags.map(f => `<span class="badge risk-tag">${esc(f)}</span>`).join('');
+
+  // Prefer structured rows
+  let kv = '';
+  if (x.isNew || !x.body.some(l => l.startsWith('续热'))) {
+    if (x.narrative) kv += `<div class="row new-row"><span class="k">叙事</span>${linkify(x.narrative.replace(/^(背景|叙事|续热)[:：]?/,''))}</div>`;
+    if (x.launch) kv += `<div class="row"><span class="k">启动</span>${linkify(x.launch.replace(/^启动[:：]?/,''))}</div>`;
+  } else {
+    const cont = x.body.find(l => l.startsWith('续热')) || x.narrative;
+    if (cont) kv += `<div class="row mute-line">${linkify(cont)}</div>`;
+  }
+  if (x.riskLine) kv += `<div class="row risk-row"><span class="k">风险</span>${linkify(x.riskLine.replace(/^风险[:：]?/,''))}</div>`;
+
+  const rest = (x.body || []).filter(l =>
+    !l.startsWith('风险') && !l.startsWith('启动') && !l.startsWith('叙事') && !l.startsWith('背景') && !l.startsWith('续热')
+  );
+
+  return `<article class="${cls}">
+    <div class="card-head">
+      <h2>${esc(x.name)}
+        <span class="badge">${esc(x.chain)}</span>
+        ${x.tag ? `<span class="badge ${badgeCls}">${esc(x.tag)}</span>` : ''}
+        ${riskBadges}
+      </h2>
+      ${pctHtml}
+    </div>
+    ${x.ca ? `<div class="ca" title="点击复制" onclick="navigator.clipboard.writeText('${esc(x.ca)}')">${esc(x.ca)}</div>` : ''}
+    ${x.nums ? `<div class="nums">${linkify(x.nums)}</div>` : ''}
+    <div class="kv">${kv}</div>
+    ${rest.length ? `<details class="more"><summary>更多</summary><div class="mute-line" style="margin-top:6px;white-space:pre-wrap">${linkify(rest.join('\n'))}</div></details>` : ''}
+  </article>`;
+}
+
 function renderGmgn(parsed) {
   if (!parsed) return '<div class="empty">暂无 GMGN 榜</div>';
-  let html = `<div class="meta" style="margin-bottom:14px">${linkify(parsed.source)}</div>`;
+  const sec6 = parsed.sections.find(s => /6/.test(s.title)) || parsed.sections[0];
+  let html = renderFocus(sec6 ? sec6.items : []);
+  html += `<div class="meta" style="margin-bottom:12px">${linkify(parsed.source)}</div>`;
   for (const sec of parsed.sections) {
     html += `<div class="section-title">${esc(sec.title)}</div>`;
-    for (const it of sec.items) {
-      const tag = (it.tag || '').toUpperCase();
-      const badgeCls = tag.includes('NEW') ? 'new' : tag.includes('PREV') ? 'prev' : 'seen';
-      const nums = esc(it.nums).replace(/([+−\-]\d[\d.%]*)/g, (m) => {
-        const cls = /[+＋]/.test(m) || m.startsWith('+') ? 'pos' : (/[−\-]/.test(m) ? 'neg' : '');
-        return cls ? `<span class="${cls}">${m}</span>` : m;
-      });
-      html += `<article class="card">
-        <h2>${esc(it.name)} <span class="badge">${esc(it.chain)}</span>
-          ${tag ? `<span class="badge ${badgeCls}">${esc(tag)}</span>` : ''}
-        </h2>
-        ${it.ca ? `<div class="ca" title="点击复制" onclick="navigator.clipboard.writeText('${esc(it.ca)}')">${esc(it.ca)}</div>` : ''}
-        ${it.nums ? `<div class="nums">${nums}</div>` : ''}
-        <div class="body">${linkify(it.body.join('\n'))}</div>
-      </article>`;
-    }
+    // NEW first within section
+    const sorted = [...sec.items].sort((a,b) => {
+      const an = /NEW/i.test(a.tag||'') ? 0 : 1;
+      const bn = /NEW/i.test(b.tag||'') ? 0 : 1;
+      return an - bn;
+    });
+    for (const it of sorted) html += renderCard(it);
   }
   return html;
 }
@@ -155,7 +303,15 @@ function renderGmgn(parsed) {
 function renderMdBlock(md, empty) {
   if (!md || !md.trim()) return `<div class="empty">${empty}</div>`;
   const blocks = md.trim().split(/\n\s*\n/);
-  return blocks.map(b => `<article class="card"><div class="body">${linkify(b.trim())}</div></article>`).join('');
+  return blocks.map(b => {
+    const lines = b.trim().split('\n');
+    const head = lines[0];
+    const rest = lines.slice(1).join('\n');
+    return `<article class="card is-new">
+      <h2 style="margin:0 0 8px">${esc(head)}</h2>
+      ${rest ? `<div class="kv"><div class="row">${linkify(rest)}</div></div>` : ''}
+    </article>`;
+  }).join('');
 }
 
 async function load() {
