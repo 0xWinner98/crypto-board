@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="refresh" content="120"/>
+<title>歪脖山 · Crypto Board</title>
+<style>
+  :root {
+    --bg: #0b0f14;
+    --panel: #121820;
+    --border: #1e2a38;
+    --text: #e8eef5;
+    --muted: #8b9bb0;
+    --accent: #3ddea8;
+    --warn: #f5a524;
+    --new: #5b8cff;
+    --prev: #8b9bb0;
+    --risk: #ff6b6b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.55;
+  }
+  header {
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: blur(10px);
+    background: rgba(11,15,20,.88);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  }
+  h1 { font-size: 16px; margin: 0; font-weight: 650; letter-spacing: .02em; }
+  h1 span { color: var(--accent); }
+  .meta { color: var(--muted); font-size: 12px; }
+  nav { display: flex; gap: 6px; }
+  nav button {
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 13px;
+  }
+  nav button.active { color: var(--bg); background: var(--accent); border-color: var(--accent); }
+  main { max-width: 920px; margin: 0 auto; padding: 20px 16px 64px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    padding: 14px 16px; margin: 0 0 12px;
+  }
+  .card h2 {
+    margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+  }
+  .badge {
+    font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border);
+    color: var(--muted); font-weight: 600;
+  }
+  .badge.new { color: var(--new); border-color: #2a3f6e; background: #152038; }
+  .badge.prev { color: var(--prev); }
+  .badge.seen { color: var(--muted); }
+  .ca {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; color: var(--accent); word-break: break-all;
+    margin: 4px 0 8px; cursor: pointer;
+  }
+  .nums { font-size: 13px; color: #c5d2e0; margin-bottom: 8px; }
+  .body { font-size: 13px; color: var(--muted); white-space: pre-wrap; }
+  .body a { color: var(--accent); }
+  .section-title {
+    margin: 22px 0 10px; font-size: 13px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .08em;
+  }
+  .empty { color: var(--muted); padding: 40px 0; text-align: center; }
+  footer { color: var(--muted); font-size: 11px; text-align: center; padding: 24px; }
+  .pos { color: var(--accent); } .neg { color: var(--risk); }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>歪脖山 <span>Crypto Board</span></h1>
+    <div class="meta" id="updated">加载中…</div>
+  </div>
+  <nav>
+    <button class="active" data-tab="gmgn">GMGN 热门榜</button>
+    <button data-tab="brief">每日简报</button>
+    <button data-tab="sudden">突发（短）</button>
+  </nav>
+</header>
+<main>
+  <div id="panel-gmgn"></div>
+  <div id="panel-brief" hidden></div>
+  <div id="panel-sudden" hidden></div>
+</main>
+<footer>观察非买卖建议 · 数据刚查刚写 · 约每 2 分钟自动刷新</footer>
+<script>
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const linkify = (s) => esc(s).replace(/https?:\/\/[^\s)\]>]+/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
+
+function parseGmgn(md) {
+  if (!md || !md.trim()) return null;
+  const lines = md.split(/\r?\n/);
+  const title = lines[0] || 'GMGN';
+  const source = lines[1] || '';
+  const sections = [];
+  let cur = null, item = null;
+  const flushItem = () => { if (item && cur) cur.items.push(item); item = null; };
+  const flushSec = () => { flushItem(); if (cur) sections.push(cur); cur = null; };
+  for (let i = 2; i < lines.length; i++) {
+    const L = lines[i];
+    if (L.startsWith('## ')) {
+      flushSec();
+      cur = { title: L.slice(3).trim(), items: [] };
+      continue;
+    }
+    if (!cur) continue;
+    if (!L.trim()) { flushItem(); continue; }
+    // title line: NAME · Chain · TAG
+    if (/·\s*(Solana|Ethereum|BSC|Base|Arbitrum)/i.test(L) && !L.startsWith('窗') && !L.startsWith('背景') && !L.startsWith('续热') && !L.startsWith('叙事') && !L.startsWith('启动') && !L.startsWith('风险')) {
+      flushItem();
+      const parts = L.split('·').map(x => x.trim());
+      item = { name: parts[0] || L, chain: parts[1] || '', tag: parts[2] || '', ca: '', nums: '', body: [] };
+      continue;
+    }
+    if (item && !item.ca && /^[0-9a-zA-Z]{20,}$/.test(L.trim())) { item.ca = L.trim(); continue; }
+    if (item && L.startsWith('窗')) { item.nums = L; continue; }
+    if (item) item.body.push(L);
+  }
+  flushSec();
+  return { title, source, sections };
+}
+
+function renderGmgn(parsed) {
+  if (!parsed) return '<div class="empty">暂无 GMGN 榜</div>';
+  let html = `<div class="meta" style="margin-bottom:14px">${linkify(parsed.source)}</div>`;
+  for (const sec of parsed.sections) {
+    html += `<div class="section-title">${esc(sec.title)}</div>`;
+    for (const it of sec.items) {
+      const tag = (it.tag || '').toUpperCase();
+      const badgeCls = tag.includes('NEW') ? 'new' : tag.includes('PREV') ? 'prev' : 'seen';
+      const nums = esc(it.nums).replace(/([+−\-]\d[\d.%]*)/g, (m) => {
+        const cls = /[+＋]/.test(m) || m.startsWith('+') ? 'pos' : (/[−\-]/.test(m) ? 'neg' : '');
+        return cls ? `<span class="${cls}">${m}</span>` : m;
+      });
+      html += `<article class="card">
+        <h2>${esc(it.name)} <span class="badge">${esc(it.chain)}</span>
+          ${tag ? `<span class="badge ${badgeCls}">${esc(tag)}</span>` : ''}
+        </h2>
+        ${it.ca ? `<div class="ca" title="点击复制" onclick="navigator.clipboard.writeText('${esc(it.ca)}')">${esc(it.ca)}</div>` : ''}
+        ${it.nums ? `<div class="nums">${nums}</div>` : ''}
+        <div class="body">${linkify(it.body.join('\n'))}</div>
+      </article>`;
+    }
+  }
+  return html;
+}
+
+function renderMdBlock(md, empty) {
+  if (!md || !md.trim()) return `<div class="empty">${empty}</div>`;
+  const blocks = md.trim().split(/\n\s*\n/);
+  return blocks.map(b => `<article class="card"><div class="body">${linkify(b.trim())}</div></article>`).join('');
+}
+
+async function load() {
+  const [gmgn, brief, sudden, meta] = await Promise.all([
+    fetch('data/gmgn-latest.md?t=' + Date.now()).then(r => r.ok ? r.text() : ''),
+    fetch('data/brief-latest.md?t=' + Date.now()).then(r => r.ok ? r.text() : ''),
+    fetch('data/sudden-latest.md?t=' + Date.now()).then(r => r.ok ? r.text() : ''),
+    fetch('data/meta.json?t=' + Date.now()).then(r => r.ok ? r.json() : {}),
+  ]);
+  document.getElementById('panel-gmgn').innerHTML = renderGmgn(parseGmgn(gmgn));
+  document.getElementById('panel-brief').innerHTML = renderMdBlock(brief, '暂无早报');
+  document.getElementById('panel-sudden').innerHTML = renderMdBlock(sudden, '暂无突发短讯（硬新闻仍会短推聊天）');
+  const u = meta.updated || meta.gmgn_updated || '';
+  document.getElementById('updated').textContent = u ? `更新：${u}` : '已加载';
+}
+
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ['gmgn','brief','sudden'].forEach(t => {
+      document.getElementById('panel-' + t).hidden = t !== btn.dataset.tab;
+    });
+  });
+});
+
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>
