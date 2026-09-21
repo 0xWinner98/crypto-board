@@ -1,12 +1,13 @@
-## SingularityNET（AGIX / WMTX）：同黑客非授权铸造，持仓约 $1677万
+## BTC：1h 爆拉约 3%，空单爆仓约 $2.52 亿（短时破 $84000）
 
-- **背景：** SingularityNET 为 ASI Alliance（原 AGIX）生态方；WMTX 为其桥/生态相关代币。同攻击者此前已打 Fetch.ai（FET）与 NuNet（NTX），本岗早间已推约 $200万 FET+NTX 一案；本条为**新受害协议**，非旧闻重发。
-- **发生了什么：** 【已核实】Odaily 519115（约 17:26 Asia/Shanghai）与律动 BlockBeats 368095：据 PeckShield 监测，攻击 Fetch.ai / NuNet 的同一黑客利用 SingularityNET 漏洞，在以太坊上**非授权铸造**约 **2.6 亿枚 AGIX** 与 **5383.8 万枚 WMTX**。攻击者当前持仓约 **$1677万**：约 1.983 亿枚 AGIX（约 $1442万）、649 枚 ETH（约 $167万）、约 3353.8 万枚 WMTX（约 $62.74万）。【已核实】BlockBeats 368091：Fetch.ai 发初步分析，称已与 SingularityNET **共同停用**受影响钱包及合约，调查仍在继续。【待核实】官方 X/博客原文、根因是否同属签名/桥授权泄露、DefiLlama 是否单列记入、铸造后抛压与 CEX 是否暂停 AGIX/WMTX 充提。【未知】完整损失口径（稀释 vs 可计 TVL）、是否还有未披露同簇地址。
-- **为什么重要 / 影响风险：** 属「黑客/漏洞」档，且从 FET/NTX 扩到 AGIX/WMTX，说明同授权面可能波及 ASI 相关多代币。持有 AGIX、WMTX、FET 或仍走 SingularityNET 桥/转换合约者，按协议被利用处理；勿假设铸造已止损。FET 现价约 $0.17（Coinbase/OKX），24h 相对 open24h 约 −6%（非本条主因）。
-- **事实分层：** 已核实：Odaily 519115、BlockBeats 368095/368091（均引 PeckShield / 项目口径）。待核实：官方 permalink、交易所公告、DefiLlama 条目、铸造交易哈希全集。未知：最终可追回金额、是否还有第三波同簇目标。
+- **背景：** 周一美股盘前风险偏好抬升；BTC 此前在 ~$81000–$82000 附近震荡。本条属「BTC/ETH 短时暴动」档，不是黑客/交易所事故。
+- **发生了什么：** 【已核实】律动 BlockBeats 368214：伴随 BTC 近 1 小时爆拉约 **3%**，短时突破 **$84000**；CoinGlass 口径全网空单爆仓约 **$2.52 亿**。【已核实】Odaily 519274：过去 1 小时全网爆仓约 **$2.60 亿**（多单约 $832.63 万 / 空单约 $2.52 亿）；其中 BTC 约 **$2.11 亿**，ETH 约 **$2549.72 万**。【已核实】Coinbase 现货 1h K（Asia/Shanghai 16:00 根）：开 ~$81707、高 **$84190**、收 ~$83661，区间约 **3.05%**；扫描时 spot 约 **$83344**（已自高点回落）。ETH 同根区间约 **1.96%**，未单列过闸。【已核实】USDT≈$0.9998 / USDC≈$1.00，未见脱锚。【待核实】触发催化是否仅为空头踩踏+美股盘前、后续 1h 是否继续扩大。【未知】后续是否二次逼空或快速回吐。
+- **为什么重要 / 影响风险：** 杠杆空头在 1h 内集中爆仓，属于会动仓位的短时波动；有永续/合约敞口者需按自身杠杆与强平线复盘，勿把「突破整数关」当成趋势确认。
+- **事实分层：** 已核实：BB 368214、Odaily 519274、Coinbase 1h K/spot。待核实：催化叙事与后续波动延续性。未知：本轮挤压是否结束。
 - **观察：** 仅作风控观察，不是买卖建议。
 
 出处：
-- https://www.odaily.news/zh-CN/newsflash/519115
-- https://www.theblockbeats.info/flash/368095
-- https://www.theblockbeats.info/flash/368091
+- https://www.theblockbeats.info/flash/368214
+- https://www.odaily.news/zh-CN/newsflash/519274
+- https://www.odaily.news/zh-CN/newsflash/519273
+- https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=3600
